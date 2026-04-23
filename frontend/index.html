@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Task Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>📋 Student Task Manager</h1>
+            <nav id="headerNav" class="hidden">
+                <div class="user-info">
+                    <span class="username-display">👤 <span id="usernameDisplay"></span></span>
+                </div>
+                <button id="logoutBtn" class="btn btn-outline">Logout</button>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <section id="authSection" class="auth-section">
+            <div id="loginForm" class="form-card">
+                <div class="form-header">
+                    <h2>🔐 Login to Your Account</h2>
+                    <p class="form-subtitle">Welcome back! Sign in to access your tasks</p>
+                </div>
+                
+                <form id="login">
+                    <div class="form-group">
+                        <label><span class="icon">👤</span> Username <span class="required">*</span></label>
+                        <input type="text" placeholder="Enter your username" required>
+                        <small class="helper-text">Your login username</small>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="icon">🔒</span> Password <span class="required">*</span></label>
+                        <input type="password" placeholder="Enter your password" required>
+                        <small class="helper-text">Keep your password secure</small>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">↪️ Login</button>
+                        <button type="button" class="btn btn-cancel" id="cancelLogin">✕ Cancel</button>
+                    </div>
+                    <p class="toggle-form">Don't have an account? <a href="#" id="toggleRegister">Register here</a></p>
+                </form>
+            </div>
+            
+            <div id="registerForm" class="form-card hidden">
+                <div class="form-header">
+                    <h2>👤 Create Your Account</h2>
+                    <p class="form-subtitle">Join us to manage your tasks efficiently</p>
+                </div>
+                <form id="register">
+                    <div class="form-group">
+                        <label><span class="icon">👤</span> Username <span class="required">*</span></label>
+                        <input type="text" placeholder="Choose a username" required>
+                        <small class="helper-text">Choose a unique username for your account</small>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="icon">✉️</span> Email <span class="required">*</span></label>
+                        <input type="email" placeholder="Enter your email" required>
+                        <small class="helper-text">We'll use this to verify your account</small>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="icon">🔒</span> Password <span class="required">*</span></label>
+                        <input type="password" placeholder="Create a password" required>
+                        <small class="helper-text">Use at least 6 characters for security</small>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="icon">�️</span> Student Number <span class="required">*</span></label>
+                        <input type="text" id="registerStudentNumber" placeholder="Enter student number" required>
+                        <small class="helper-text">E.g., S2026XXXX</small>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="icon">🎓</span> Major <span class="required">*</span></label>
+                        <input type="text" id="registerMajor" placeholder="Enter your major" required>
+                        <small class="helper-text">E.g., Computer Science</small>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="icon">�🔒</span> Confirm Password <span class="required">*</span></label>
+                        <input type="password" placeholder="Confirm your password" required>
+                        <small class="helper-text">Passwords must match</small>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">✓ Create Account</button>
+                        <button type="button" class="btn btn-cancel" id="cancelRegister">✕ Cancel</button>
+                    </div>
+                    <p class="toggle-form">Already have an account? <a href="#" id="toggleLogin">Login here</a></p>
+                </form>
+            </div>
+        </section>
+        
+        <section id="taskSection" class="hidden">
+            <div class="container dashboard">
+                <div class="dashboard-header">
+                    <div class="header-left">
+                        <h2>📋 My Tasks</h2>
+                        <p class="task-count">You have <span id="taskCount">0</span> task</p>
+                    </div>
+                    <button id="addTaskBtn" class="btn btn-primary">+ Add Task</button>
+                </div>
+                
+                <div class="search-filter-section">
+                    <h3>🔽 Search & Filter</h3>
+                    <div class="search-filter-controls">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="searchInput" placeholder="Search task by title...">
+                        </div>
+                        <select id="filterStatus" class="filter-dropdown">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                        <button class="btn-filter">🔍 Filter</button>
+                    </div>
+                </div>
+
+                <div class="tasks-table-wrapper">
+                    <table class="tasks-table">
+                        <thead>
+                            <tr>
+                                <th>📋 Task Title</th>
+                                <th>�📅 Due Date</th>
+                                <th>🏷️ Status</th>
+                                <th>⚙️ Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="taskList">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="stats-section">
+                    <div class="stat-card">
+                        <h4>Total Tasks</h4>
+                        <p class="stat-number" id="totalTasksCount">0</p>
+                    </div>
+                    <div class="stat-card in-progress">
+                        <h4>⚡ In Progress</h4>
+                        <p class="stat-number" id="inProgressCount">0</p>
+                    </div>
+                    <div class="stat-card completed">
+                        <h4>✅ Completed</h4>
+                        <p class="stat-number" id="completedCount">0</p>
+                    </div>
+                    <div class="stat-card pending">
+                        <h4>🔴 Pending</h4>
+                        <p class="stat-number" id="pendingCount">0</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Task Modal -->
+        <div id="taskModal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-content form-card">
+                <div class="form-header">
+                    <h2>➕ Add New Task</h2>
+                    <p class="form-subtitle">Create a new task to stay organized</p>
+                </div>
+                <form id="addTaskForm">
+                    <div class="form-group">
+                        <label><span class="icon">📋</span> Task Title <span class="required">*</span></label>
+                        <input type="text" id="taskTitle" placeholder="Enter task title" required>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="icon">📝</span> Description <span class="optional">(Optional)</span></label>
+                        <textarea id="taskDescription" placeholder="Enter task description (optional)" rows="4"></textarea>
+                        <small class="helper-text">ℹ️ Add details about your task</small>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="icon">📅</span> Due Date <span class="required">*</span></label>
+                        <input type="date" id="taskDeadline" required>
+                        <small class="helper-text">ℹ️ Set a deadline for your task</small>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="icon">🏷️</span> Status <span class="required">*</span></label>
+                        <select id="taskStatus" required>
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                        <small class="helper-text">ℹ️ Choose the current status of your task</small>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">📋 Add Task</button>
+                        <button type="button" class="btn btn-cancel" id="closeTaskModal">✕ Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Update Task Modal -->
+        <div id="updateTaskModal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-content form-card">
+                <div class="form-header">
+                    <h2>✏️ Update Task</h2>
+                    <p class="form-subtitle">Edit your task details</p>
+                </div>
+                <form id="updateTaskForm">
+                    <div class="form-group">
+                        <label><span class="icon">📋</span> Task Title <span class="required">*</span></label>
+                        <input type="text" id="updateTaskTitle" placeholder="Enter task title" required>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="icon">📝</span> Description <span class="optional">(Optional)</span></label>
+                        <textarea id="updateTaskDescription" placeholder="Enter task description (optional)" rows="4"></textarea>
+                        <small class="helper-text">ℹ️ Add details about your task</small>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="icon">📅</span> Due Date <span class="required">*</span></label>
+                        <input type="date" id="updateTaskDeadline" required>
+                        <small class="helper-text">ℹ️ Set a deadline for your task</small>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="icon">🏷️</span> Status <span class="required">*</span></label>
+                        <select id="updateTaskStatus" required>
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                        <small class="helper-text">ℹ️ Choose the current status of your task</small>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">💾 Update Task</button>
+                        <button type="button" class="btn btn-cancel" id="closeUpdateModal">✕ Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- View Task Details Modal -->
+        <div id="viewTaskModal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-content form-card">
+                <div class="form-header">
+                    <h2>👁️ Task Details</h2>
+                    <p class="form-subtitle">View complete task information</p>
+                </div>
+                <div class="task-details-content">
+                    <div class="detail-group">
+                        <label><span class="icon">📋</span> Task Title</label>
+                        <div class="detail-value" id="viewTaskTitle"></div>
+                    </div>
+                    <div class="detail-group">
+                        <label><span class="icon">📝</span> Description</label>
+                        <div class="detail-value" id="viewTaskDescription"></div>
+                    </div>
+                    <div class="detail-group">
+                        <label><span class="icon">📅</span> Due Date</label>
+                        <div class="detail-value" id="viewTaskDeadline"></div>
+                    </div>
+                    <div class="detail-group">
+                        <label><span class="icon">🏷️</span> Status</label>
+                        <div class="detail-value">
+                            <span class="status-badge" id="viewTaskStatus"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel" id="closeViewModal">✕ Close</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>&copy; 2026 Student Task Manager. All rights reserved.</p>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
